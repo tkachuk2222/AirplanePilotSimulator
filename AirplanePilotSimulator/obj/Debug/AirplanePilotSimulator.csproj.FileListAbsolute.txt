@@ -1,0 +1,6 @@
+c:\users\dell\documents\visual studio 2015\Projects\AirplanePilotSimulator\AirplanePilotSimulator\bin\Debug\AirplanePilotSimulator.exe.config
+c:\users\dell\documents\visual studio 2015\Projects\AirplanePilotSimulator\AirplanePilotSimulator\bin\Debug\AirplanePilotSimulator.exe
+c:\users\dell\documents\visual studio 2015\Projects\AirplanePilotSimulator\AirplanePilotSimulator\bin\Debug\AirplanePilotSimulator.pdb
+c:\users\dell\documents\visual studio 2015\Projects\AirplanePilotSimulator\AirplanePilotSimulator\obj\Debug\AirplanePilotSimulator.csprojResolveAssemblyReference.cache
+c:\users\dell\documents\visual studio 2015\Projects\AirplanePilotSimulator\AirplanePilotSimulator\obj\Debug\AirplanePilotSimulator.exe
+c:\users\dell\documents\visual studio 2015\Projects\AirplanePilotSimulator\AirplanePilotSimulator\obj\Debug\AirplanePilotSimulator.pdb
