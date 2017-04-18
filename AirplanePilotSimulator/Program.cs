@@ -52,7 +52,21 @@ namespace AirplanePilotSimulator
             public void infoFromDisp(int s)
             {
                 foreach (var disp in _pDispetchers)
+                {
                     Console.WriteLine($"recomended height: ____ {disp.recommendedHeight(s)}");
+                    try
+                    {
+                        disp.PenaltyPoints(disp.recommendedHeight(s), _pHeight, _pSpeed);
+                    }
+                    catch (AircraftCrashed ex)
+                    {
+                        Console.WriteLine(ex);
+                    }
+                    catch (UnsuitableToFlights ex)
+                    {
+                        Console.WriteLine(ex);
+                    }
+                }
             }
 
 
@@ -62,31 +76,35 @@ namespace AirplanePilotSimulator
             {
                 if (canFly() == true)
                 {
-                    if (_pSpeed < 1000)
-                    {
-                        _pSpeed += speed;
-                        _pHeight += height;
-                    }
-                   
-                    else
-                    {
-                        if(speed < 0 && _pSpeed > 0)
-                            _pSpeed += speed;
-                        _pHeight += height;
-                    }
+                    _pSpeed += speed;
+                    _pHeight += height;
+
                     if (_pSpeed < 0)
                         _pSpeed = 0;
                     if (_pHeight < 0)
                         _pHeight = 0;
                     Console.WriteLine($"{_pSpeed}\t\t{_pHeight}");
-                    //FlyingSpeed flsp;
-                    //flsp = getSpeed;
-                    //flsp.Invoke();
+                    infoFromDisp(getSpeed());
+                }
+                else
+                {
+                    Console.WriteLine("Please, add more then 1 dispetcher");
                 }
             }
             public int getSpeed() {
                 return _pSpeed;
             }
+
+            //
+            // show penalty points
+            public int getPenPoint()
+            {
+                int sum = 0;
+                foreach (var el in _pDispetchers)
+                    sum += el.PenPoints;
+                return sum;
+            }
+
             //
             // list of dispetchers
             private List<Dispatcher> _pDispetchers;
@@ -105,19 +123,21 @@ namespace AirplanePilotSimulator
             }
             protected string Name { set; get; }
 
-            // correcting weather
+            // correcting weather(random)
             public int Weather()
             {
                 int rand = ((new Random()).Next(-200, 200));
                 return rand;
             }
+
+            //
+            // return recomended height
             public int recommendedHeight(int speed)
             {
                 if (speed > 50)
                 {
                     int result = 7 * speed - Weather();
                     return result;
-                 //   Console.WriteLine($"recomendet height: ____ {result}");
                 }
                 return 0;
             }
@@ -159,14 +179,13 @@ namespace AirplanePilotSimulator
             Airplane plane = new Airplane();
 
 
-            FlyingSpeed flsp;
-            flsp = plane.getSpeed;
+            
             // flsp.Invoke();
 
 
             while (true)
             {
-                Console.WriteLine("1.Start fly\n2.Add dispetcher");
+                Console.WriteLine("1.Start fly\n2.Add dispetcher\n3.Show result");
                 int m = int.Parse(Console.ReadLine());
 
 
@@ -183,12 +202,11 @@ namespace AirplanePilotSimulator
 
                                 //Console.Clear();
                                 Console.WriteLine("Press Right: +50km\\h, Left: –50km\\h, Shift-Right: +150km\\h, Shift - Left: –150km\\h");
-                                Console.WriteLine("Up: +250 m, Down: –250 m, Shift-Up: +500 m, Shift-Down: –500m).");
+                                Console.WriteLine("Press Up: +250 m, Down: –250 m, Shift-Up: +500 m, Shift-Down: –500m).");
                                 Console.WriteLine("To exit press Escape");
                                 cki = Console.ReadKey();
-                                try
-                                {
-                                    plane.infoFromDisp(plane.getSpeed());
+                              
+                                    
                                     //
                                     // height
                                     if (((cki.Modifiers & ConsoleModifiers.Shift) != 0) && cki.Key == ConsoleKey.UpArrow) plane.flying(0, 500);
@@ -197,20 +215,13 @@ namespace AirplanePilotSimulator
                                     if (((cki.Modifiers & ConsoleModifiers.Shift) == 0) && cki.Key == ConsoleKey.DownArrow) plane.flying(0, -250);
 
                                     //
-                                    // down
+                                    // speed
                                     if (((cki.Modifiers & ConsoleModifiers.Shift) != 0) && cki.Key == ConsoleKey.RightArrow) plane.flying(150, 0);
                                     if (((cki.Modifiers & ConsoleModifiers.Shift) != 0) && cki.Key == ConsoleKey.LeftArrow) plane.flying(-150, 0);
                                     if (((cki.Modifiers & ConsoleModifiers.Shift) == 0) && cki.Key == ConsoleKey.RightArrow) plane.flying(50, 0);
                                     if (((cki.Modifiers & ConsoleModifiers.Shift) == 0) && cki.Key == ConsoleKey.LeftArrow) plane.flying(-50, 0);
-                                }
-                                catch (AircraftCrashed ex)
-                                {
-                                    Console.WriteLine(ex);
-                                }
-                                catch (UnsuitableToFlights ex)
-                                {
-                                    Console.WriteLine(ex);
-                                }
+                               
+                                
                             } while (cki.Key != ConsoleKey.Escape);
 
 
@@ -220,6 +231,11 @@ namespace AirplanePilotSimulator
                         {
                             Console.WriteLine("Input name of dispetcher");
                             plane.setDispatcher(Console.ReadLine());
+                            break;
+                        }
+                    case 3:
+                        {
+                            Console.WriteLine($"Penalty points: \t {plane.getPenPoint()}");
                             break;
                         }
                 }
